@@ -4,8 +4,8 @@ include ActiveSchema
 describe SchemaFeeder do
   before(:each) do
     @table_hub = ActiveSchema::TableHub.new
-    @dispatcher = mock("Dispatcher").as_null_object
-    @schema_feeder = SchemaFeeder.new(@table_hub, @dispatcher)
+    @schema_feeder = SchemaFeeder.new
+    @schema_feeder.stub!(:table_hub).and_return(@table_hub)
   end
 
   context "add_index" do

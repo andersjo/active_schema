@@ -4,12 +4,10 @@ include ActiveSchema
 describe InAdvanceFeeder do
   before(:each) do
     @prisoner_model = Prisoner.dup
-    @table_hub = ActiveSchema::TableHub.new
     @dispatcher = mock("Dispatcher").as_null_object
-    @in_advance_feeder = InAdvanceFeeder.new(@table_hub, @dispatcher)
+    @in_advance_feeder = InAdvanceFeeder.new
     @in_advance_feeder.stub!(:dispatch_attachments)
     @in_advance_feeder.stub!(:add_model)
-
   end
 
   context "when a model is loaded" do

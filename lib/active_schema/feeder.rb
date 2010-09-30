@@ -1,24 +1,24 @@
 module ActiveSchema
   class Feeder
     attr_reader :associations_generator, :validations_generator, :table_hub
-    def initialize(table_hub, dispatcher = nil)
-      @table_hub = table_hub
+    def initialize
+      @table_hub = TableHub.new
       @associations_generator = Associations::Generator
       @validations_generator  = Validations::Generator
     end
 
     def add_model(model)
-      @table_hub.add_model(model)
+      table_hub.add_model(model)
     end
 
     def dispatch_attachments(model)
-      table = @table_hub.tables[model.table_name]
+      table = table_hub.tables[model.table_name]
       generate_validations(table)
       generate_assocations(table)
     end
 
     def generate_assocations(table)
-      @table_hub.relations[table.model.table_name].select(&:model).each do |linked_table|
+      table_hub.relations[table.model.table_name].select(&:model).each do |linked_table|
         generate_associations_between(table, linked_table)
       end
     end

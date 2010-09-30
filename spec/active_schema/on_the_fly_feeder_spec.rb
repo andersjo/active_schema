@@ -11,10 +11,11 @@ describe ActiveSchema::OnTheFlyFeeder do
       :connection => @connection
     )
     @prisoner_table = mock("PrisonerTable")
-    @table_hub = ActiveSchema::TableHub.new
     @dispatcher = mock("Dispatcher").as_null_object
-    @on_the_fly_attacher = ActiveSchema::OnTheFlyFeeder.new(@table_hub, @dispatcher)
+    @on_the_fly_attacher = ActiveSchema::OnTheFlyFeeder.new
     @on_the_fly_attacher.stub!(:dispatch_attachments)
+    @table_hub = ActiveSchema::TableHub.new
+    @on_the_fly_attacher.stub!(:table_hub).and_return(@table_hub)
   end
 
   context "when a model is loaded" do

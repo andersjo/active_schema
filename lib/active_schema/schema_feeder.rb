@@ -21,12 +21,12 @@ module ActiveSchema
     def add_index(table_name, column_name, options = {})
       index = ::ActiveRecord::ConnectionAdapters::IndexDefinition\
         .new(table_name, options[:name], options[:unique], Array(column_name), options[:lengths])
-      @table_hub.add_index(table_name, index)
+      table_hub.add_index(table_name, index)
     end
 
     def add_foreign_key(from_table, to_table, options = {})
       column = options[:column] ? options[:column] : "#{to_table.singularize}_id"
-      @table_hub.add_foreign_key(from_table, to_table, column)
+      table_hub.add_foreign_key(from_table, to_table, column)
     end
 
     def read(schema)

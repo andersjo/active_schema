@@ -5,8 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ActiveSchema::Feeder do
   before(:each) do
-    @table_hub = ActiveSchema::TableHub.new
-    @feeder = ActiveSchema::Feeder.new(@table_hub)
+    @feeder = ActiveSchema::Feeder.new
     @feeder.stub_chain("associations_generator.new.generate")
     @feeder.stub_chain("validations_generator.new.generate")
 
