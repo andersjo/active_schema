@@ -1,10 +1,7 @@
-module ActiveSchema
-  class OnTheFlyFeeder
-    def initialize(table_hub, dispatcher)
-      @table_hub = table_hub
-      @dispatcher = dispatcher
-    end
+require 'active_schema/feeder'
 
+module ActiveSchema
+  class OnTheFlyFeeder < Feeder
     def model_loaded(model)
       add_model(model)
       add_indexes(model)
@@ -25,19 +22,5 @@ module ActiveSchema
       end
 
     end
-
-    def add_model(model)
-      @table_hub.add_model(model)
-    end
-
-    def dispatch_attachments(model)
-      table = @table_hub.tables[model.table_name]
-      @dispatcher.attach_validations(table)
-      @dispatcher.attach_associations(table)
-      @table_hub.relations[model.table_name].select(&:model).each do |linked_table|
-        @dispatcher.attach_associations_between(table, linked_table)
-      end
-    end
-
   end
 end

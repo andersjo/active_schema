@@ -14,6 +14,7 @@ describe ActiveSchema::OnTheFlyFeeder do
     @table_hub = ActiveSchema::TableHub.new
     @dispatcher = mock("Dispatcher").as_null_object
     @on_the_fly_attacher = ActiveSchema::OnTheFlyFeeder.new(@table_hub, @dispatcher)
+    @on_the_fly_attacher.stub!(:dispatch_attachments)
   end
 
   context "when a model is loaded" do
@@ -43,13 +44,8 @@ describe ActiveSchema::OnTheFlyFeeder do
       @table_hub.should_receive(:add_model).with(@prisoner_model)
     end
 
-    it "requests that associations be attached" do
-      @dispatcher.should_receive(:attach_associations).with(instance_of(ActiveSchema::Table))
+    it "attaches associations and validations" do
+      @on_the_fly_attacher.should_receive(:dispatch_attachments)
     end
-
-    it "requests that validations be attached" do
-      @dispatcher.should_receive(:attach_validations).with(instance_of(ActiveSchema::Table))
-    end
-
   end
 end

@@ -14,7 +14,7 @@ module ActiveSchema
       end
 
       def init_active_schema
-        @attacher ||= OnTheFlyFeeder.new(TableHub.new, AttachmentDispatcher.new)
+        @attacher ||= OnTheFlyFeeder.new(TableHub.new)
       end
 
       def active_schema_attacher
