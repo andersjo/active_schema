@@ -3,6 +3,8 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
+gem "foreigner"
+gem "activerecord"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do
@@ -15,4 +17,5 @@ group :development do
   gem "autotest-growl"
   gem "autotest-fsevent"
   gem "spork"
+  gem "mysql2"
 end
