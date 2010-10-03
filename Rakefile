@@ -13,8 +13,12 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "active_schema"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Association discovery by foreign keys}
+  gem.description = %Q{If you've gone through the trouble of linking your schema with proper foreign keys,
+    defining associations in ActiveRecord feels like double work.
+
+    ActiveSchema discovers the associations and validations that can be derived from the database schema.
+  }
   gem.email = "anders@johannsen.com"
   gem.homepage = "http://github.com/andersjo/active_schema"
   gem.authors = ["Anders Johannsen"]
@@ -22,6 +26,8 @@ Jeweler::Tasks.new do |gem|
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  spec.add_runtime_dependency 'jabber4r', '> 0.1'
   #  spec.add_development_dependency 'rspec', '> 1.2.3'
+#    spec.add_runtime_dependency 'jabber4r', '> 0.1'
+  gem.add_runtime_dependency 'foreigner'
   gem.add_development_dependency "rspec", ">= 2.0.0.beta.19"
   gem.add_development_dependency "bundler", "~> 1.0.0"
   gem.add_development_dependency "jeweler", "~> 1.5.0.pre3"
