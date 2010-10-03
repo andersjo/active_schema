@@ -5,14 +5,6 @@ describe ActiveSchema::TableHub do
     @table_hub = ActiveSchema::TableHub.new
   end
 
-  def prisoner_model
-    mock("PrisonerModel", :table_name => "prisoners")
-  end
-
-  def facility_model
-    mock("FacilityModel", :table_name => "facilities")
-  end
-
   context "when adding a model" do
     it "should have a table by the model's table name" do
       @table_hub.add_model(prisoner_model)

@@ -1,27 +1,23 @@
 module ActiveSchema
   module ActiveRecord
     module ClassMethods
-      def active_schema(feeder = OnTheFlyFeeder.new)
-        @active_schema_activated = true
-        ::ActiveRecord::Base.init_active_schema(feeder)
-        if self != ::ActiveRecord::Base
-          ::ActiveRecord::Base.active_schema_feeder.model_loaded(self)
+      def self.extended(klass)
+        klass.class_attribute :active_schema_activated
+        klass.class_attribute :active_schema_configuration
+        klass.active_schema_configuration = ActiveSchema.configuration
+      end
+
+      def active_schema
+        if !active_schema_activated
+          self.active_schema_activated = true
+          active_schema_load_model
         end
       end
 
-      def active_schema_activated?
-        @active_schema_activated
-      end
-
-      def init_active_schema(feeder)
-        if @feeder.nil?
-          @feeder = feeder
-          ::ActiveRecord::Base.add_observer(::ActiveRecord::ModelLoadedObserver.new)
+      def active_schema_load_model
+        unless active_schema_configuration.skip_model.call(self)
+          active_schema_configuration.feeder.model_loaded(self)
         end
-      end
-
-      def active_schema_feeder
-        @feeder
       end
 
     end
@@ -30,20 +26,21 @@ module ActiveSchema
     end
   end
 end
-  
+
+ActiveRecord::Base
 module ActiveRecord #:nodoc:
   class ModelLoadedObserver
-    def update(event, value)
+    def update(event, klass)
       case event 
       when :observed_class_inherited
-        Base.active_schema_feeder.model_loaded(value)
+        klass.active_schema_load_model if klass.active_schema_activated
       end
     end
   end
 
   class Base
+    add_observer ModelLoadedObserver.new
     extend  ActiveSchema::ActiveRecord::ClassMethods
     include ActiveSchema::ActiveRecord::InstanceMethods
   end
 end
-

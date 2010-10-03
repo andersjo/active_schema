@@ -1,10 +1,11 @@
 module ActiveSchema
   class Feeder
     attr_reader :associations_generator, :validations_generator, :table_hub
-    def initialize
+    def initialize(configuration = ActiveSchema.configuration)
       @table_hub = TableHub.new
       @associations_generator = Associations::Generator
       @validations_generator  = Validations::Generator
+      @configuration = configuration
     end
 
     def add_model(model)
@@ -29,7 +30,7 @@ module ActiveSchema
     end
 
     def generate_validations(table)
-      validations_generator.new(table).generate
+      validations_generator.new(table, @configuration.skip_validation_for_column).generate
     end
 
     def generate_directed_associations_between(table1, table2)

@@ -16,9 +16,10 @@ require 'active_schema/validations/by_index'
 
 module ActiveSchema::Validations
   class Generator
-    def initialize(table)
+    def initialize(table, skip_validation_for_column)
       @table = table
       @model = table.model
+      @skip_validation_for_column = skip_validation_for_column
     end
 
     def generate
@@ -28,6 +29,7 @@ module ActiveSchema::Validations
 
     def generate_for_columns
       @model.columns.each do |column|
+        next if @skip_validation_for_column.call(column)
         ByDataType.new(@model, column).generate
         ByNullability.new(@model, column).generate
       end
