@@ -1,0 +1,80 @@
+h1. ActiveSchema
+
+ActiveSchema makes ActiveRecord a bit DRYer. It discovers associations, such as belongs_to and has_many, using foreign keys, and it adds validations to ensure constraints on data, like NOT NULL and maximum length, are honored.
+
+h2. An example
+
+If you have a table structure like this (arrows indicate foreign keys)
+
+  !http://farm5.static.flickr.com/4113/5047260003_da4ecd08ac_z.jpg!
+
+ActiveSchema would link your models like below
+
+<pre>
+class Prisoner
+  belongs_to :facility
+end
+
+class Facility
+  has_many :facilities
+  belongs_to :warden
+end
+
+class Warde
+  has_one :facility
+end
+</pre>
+
+
+h2. Usage
+
+Put
+
+@gem 'activeschema'@
+
+in your Gemfile.
+
+ActiveSchema can be enabled per model, or you can choose to make it available everywhere.
+
+Either way, it must be activated by the @active_schema@ class method. Per model:
+
+<pre>
+class Model < ActiveRecord::Base
+  active_schema
+end
+</pre>
+
+In ActiveRecord::Base:
+
+<pre>
+class ActiveRecord::Base
+  active_schema
+end
+</pre>
+
+
+h2. Foreign key support by 'foreigner'
+
+Foreign key information is extracted by the "Foreigner":http://github.com/matthuhiggins/foreigner library.
+It has out-of-the-box support for MySQL, Postgresql, and SQL2003.
+
+h2. Rails 3 and Ruby 1.9.2
+
+ActiveSchema has only been tested on Rails 3 and Ruby 1.9.2. It may work elsewhere, but there really is no guarantee.
+
+h2. Preloading the associations
+
+The speed at which MySQL supplies foreign key information can, at times, be leisurely, to say the least.
+
+To circumvent this, ActiveSchema supports foreign key extraction without hitting the database.
+Instead, it reads the information from the dumped "schema.rb" file, which of course must be current.
+
+Adjusted configuration:
+
+<pre>
+schema_feeder = ActiveSchema::SchemaFeeder.new
+schema_feeder.read("path/to/schema.rb")
+ActiveSchema.configure do |c|
+   c.feeder = schema_feeder
+end
+</pre>
